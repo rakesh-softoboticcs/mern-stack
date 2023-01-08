@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const {CreatePostsController,GetPostsController,GetPostByIdController} = require('../controller/Posts')
+const {CreatePostsController,GetPostsController,GetPostByIdController} = require('../controller/Posts');
+const { validateToken } = require("../middleware/AuthMiddleware");
 
 
-router.get("/", GetPostsController);
+router.get("/",validateToken, GetPostsController);
 
-router.post("/", CreatePostsController)
+router.post("/",validateToken, CreatePostsController)
 
-router.get('/byId/:id',GetPostByIdController)
+router.get('/byId/:id',validateToken,GetPostByIdController)
 
 module.exports = router;

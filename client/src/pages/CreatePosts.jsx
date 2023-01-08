@@ -1,11 +1,27 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import axios from 'axios';
+import {Link,useNavigate} from 'react-router-dom'
 
 const CreatePosts = () => {
-  const { register, handleSubmit, formState:{errors} } = useForm();
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState:{errors,isValid},reset } = useForm({
+    mode:"all",
+    reValidateMode:"onChange",
+    defaultValues:{}
+  });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    axios.post('http://localhost:3001/posts',data).then((response)=>{
+      navigate('/')
+    },{
+      headers:{
+        Authorization:`Bearer ${sessionStorage.getItem('accessToken')}`
+      }
+    })
+    reset();
+  }
   return (
     <>
       <div>Create a Post</div>
@@ -35,19 +51,20 @@ const CreatePosts = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="postText">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
+          <Form.Label>Post</Form.Label>
+          <textarea
             type="text"
             placeholder="Post"
+            className="form-control"
         
             {...register("postText", { required: true })}
             aria-invalid={errors.postText ? "true" : "false"}
-          />
+          ></textarea>
           {errors.postText?.type === "required" && <p className="text-danger">Post is required</p>}
         </Form.Group>
 
        
-        <Button variant="primary" type="submit" >
+        <Button variant="primary" type="submit" disabled={!isValid} >
           Create Post
         </Button>
       </Form>

@@ -55,3 +55,12 @@ body {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
+
+a{
+  color:white !important;
+  text-decoration: none !important;
+}
+
+a:hover{
+  color:grey !important;
+}
